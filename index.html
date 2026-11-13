@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprint Studio</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0c16;color:#f5f0ff;font:16px system-ui,Arial}
+main{max-width:760px;margin:auto;padding:32px 18px}
+h1{font-size:30px;margin:0}
+h2{font-size:19px}
+p,small{color:#aaa0bf}
+.card{background:#1b1729;border:1px solid #38304b;border-radius:18px;padding:22px;margin:18px 0}
+label{display:block;margin:15px 0 6px;color:#c9b9e7}
+input,select,button{font:inherit;border-radius:9px;padding:12px}
+input,select{width:100%;background:#100e1c;color:white;border:1px solid #514361}
+button{border:0;background:#b78aff;color:#120c1c;font-weight:700;cursor:pointer}
+button:disabled{opacity:.5}
+button.secondary{background:#353047;color:#eee}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+#clock{text-align:center;font-size:clamp(60px,14vw,100px);font-weight:750;letter-spacing:-3px;margin:15px 0;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#272039;border-radius:12px;padding:14px;text-align:center}
+.stat b{display:block;font-size:23px}
+.stat small{font-size:12px}
+.row{display:flex;gap:10px}
+.row>*{flex:1;min-width:0}
+#alarmStop{display:none;background:#f97373}
+.entry{border-top:1px solid #393047;padding:12px 0;line-height:1.6}
+.entry small{display:block}
+header small{color:#b78aff;letter-spacing:2px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<small>YOUR CREATIVE PRODUCTIVITY SPACE</small>
+<h1>✦ Sprint Studio</h1>
+<p>Focus. Create. Track your wins.</p>
+</header>
+
+<section class="card">
+<h2>New Sprint</h2>
+<label>Project</label>
+<input id="project" placeholder="e.g. One Wicked Night">
+<label>Activity</label>
+<select id="activity">
+<option>Writing</option>
+<option>Content Creation</option>
+<option>Editing / Production</option>
+<option>Planning</option>
+<option>Admin</option>
+<option>Other</option>
+</select>
+<div class="row">
+<div>
+<label>Duration (minutes)</label>
+<input id="duration" type="number" min="1" max="240" value="30">
+</div>
+<div>
+<label>Goal (optional)</label>
+<input id="goal" placeholder="e.g. 1000 words">
+</div>
+</div>
+<div id="clock">30:00</div>
+<div class="actions">
+<button id="start">▶ Start Sprint</button>
+<button id="pause" class="secondary">Pause</button>
+<button id="reset" class="secondary">Reset</button>
+<button id="alarmStop">🔕 Stop Alarm</button>
+</div>
+<p id="status">Ready when you are.</p>
+</section>
+
+<section class="card">
+<h2>Log Your Progress</h2>
+<label>Amount completed</label>
+<div class="row">
+<input id="amount" type="number" min="0" placeholder="e.g. 850">
+<select id="unit">
+<option>words</option>
+<option>videos</option>
+<option>tasks</option>
+<option>pages</option>
+<option>scenes</option>
+<option>custom</option>
+</select>
+</div>
+<label>Notes (optional)</label>
+<input id="notes" placeholder="What did you accomplish?">
+<div class="actions">
+<button id="save">Save Sprint</button>
+</div>
+</section>
+
+<section class="card">
+<h2>Your Productivity</h2>
+<div class="stats">
+<div class="stat"><b id="count">0</b><small>Sprints</small></div>
+<div class="stat"><b id="minutes">0</b><small>Minutes</small></div>
+<div class="stat"><b id="today">0</b><small>Today</small></div>
+</div>
+<h2>Recent Sessions</h2>
+<div id="history"></div>
+<div class="actions">
+<button id="export" class="secondary">Export History</button>
+</div>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const KEY="sprint-studio-history-v1";
+let history=[];
+try{history=JSON.parse(localStorage.getItem(KEY)||"[]")}
+catch(e){history=[]}
+let remaining=1800,deadline=0,running=false,paused=false;
+let timer=null,alarmTimer=null,audio=null;
+let sessionSeconds=0;
+
+function showClock(){
+ const m=Math.floor(remaining/60),s=remaining%60;
+ $("clock").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+ document.title=$("clock").textContent+" | Sprint Studio";
+}
+function stopTimer(){clearInterval(timer);timer=null;running=false}
+function tick(){
+ remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+ showClock();
+ if(remaining===0){
+  stopTimer();paused=false;
+  $("status").textContent="Sprint complete! Log your progress.";
+  alarm();
+ }
+}
+function start(){
+ if(running)return;
+ stopAlarm();
+ if(!paused){
+  remaining=Math.max(1,Number($("duration").value)||30)*60;
+  sessionSeconds=remaining;
+ }
+ // Audio must be initialized from a user interaction.
+ try{
+  audio=audio||new (window.AudioContext||window.webkitAudioContext)();
+  audio.resume();
+ }catch(e){}
+ deadline=Date.now()+remaining*1000;
+ running=true;paused=false;
+ $("status").textContent="You're in the zone. Keep going!";
+ timer=setInterval(tick,250);
+ showClock();
+}
+function pause(){
+ if(running){
+  tick();stopTimer();paused=true;
+  $("status").textContent="Paused.";
+ }else if(paused)start();
+}
+function reset(){
+ stopTimer();stopAlarm();paused=false;
+ remaining=Math.max(1,Number($("duration").value)||30)*60;
+ sessionSeconds=remaining;
+ $("status").textContent="Ready when you are.";
+ showClock();
+}
+function beep(){
+ if(!audio)return;
+ audio.resume();
+ for(let i=0;i<3;i++){
+  let osc=audio.createOscillator();
+  let gain=audio.createGain();
+  osc.type="square";
+  osc.frequency.value=i%2?650:950;
+  gain.gain.value=.18;
+  osc.connect(gain);gain.connect(audio.destination);
+  const t=audio.currentTime+i*.27;
+  gain.gain.setValueAtTime(.18,t);
+  gain.gain.setValueAtTime(0,t+.19);
+  osc.start(t);osc.stop(t+.2);
+ }
+}
+function stopAlarm(){
+ if(alarmTimer){clearInterval(alarmTimer);alarmTimer=null}
+ $("alarmStop").style.display="none";
+}
+function alarm(){
+ stopAlarm();beep();
+ $("alarmStop").style.display="inline-block";
+ let n=1;
+ alarmTimer=setInterval(()=>{
+  if(n++>=20){stopAlarm();return}
+  beep();
+ },1000);
+}
+function save(){
+ let entry={
+  date:new Date().toISOString(),
+  project:$("project").value.trim()||"Untitled Project",
+  activity:$("activity").value,
+  minutes:Math.round((sessionSeconds-remaining)/60),
+  amount:Number($("amount").value)||0,
+  unit:$("unit").value,
+  goal:$("goal").value,
+  notes:$("notes").value
+ };
+ if(!entry.minutes&&!entry.amount){
+  $("status").textContent="Start a sprint or enter progress first.";
+  return;
+ }
+ history.unshift(entry);
+ try{localStorage.setItem(KEY,JSON.stringify(history))}
+ catch(e){alert("Browser storage is unavailable. Export your history to keep a copy.")}
+ $("amount").value="";$("notes").value="";
+ $("status").textContent="Progress saved!";
+ render();
+}
+function render(){
+ $("count").textContent=history.length;
+ $("minutes").textContent=history.reduce((a,x)=>a+x.minutes,0);
+ const day=new Date().toDateString();
+ $("today").textContent=history.filter(x=>new Date(x.date).toDateString()===day).length;
+ $("history").replaceChildren();
+ if(!history.length){$("history").textContent="Your first win is waiting.";return}
+ history.slice(0,30).forEach(x=>{
+  let div=document.createElement("div");
+  div.className="entry";
+  let title=document.createElement("strong");
+  title.textContent=x.project+" · "+x.activity;
+  let detail=document.createElement("small");
+  detail.textContent=new Date(x.date).toLocaleString()+" · "+x.minutes+" min · "+x.amount+" "+x.unit;
+  div.append(title,detail);
+  if(x.notes){
+   let note=document.createElement("small");
+   note.textContent=x.notes;div.append(note);
+  }
+  $("history").append(div);
+ });
+}
+function exportHistory(){
+ const blob=new Blob([JSON.stringify(history,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="sprint-studio-history.json";a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$("start").onclick=start;
+$("pause").onclick=pause;
+$("reset").onclick=reset;
+$("alarmStop").onclick=stopAlarm;
+$("save").onclick=save;
+$("export").onclick=exportHistory;
+$("duration").onchange=()=>{if(!running&&!paused)reset()};
+render();showClock();
+</script>
+</body>
+</html>
