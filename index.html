@@ -4,112 +4,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sprint Studio 2.0</title>
+<title>Sprint Studio 3.0</title>
 <style>
-:root{color-scheme:dark;--bg:#0d0b16;--card:#1b1729;--line:#39304e;--purple:#b88aff;--text:#f7f1ff;--muted:#b0a4c3}
+:root{color-scheme:dark;--bg:#0d0b16;--card:#1b1729;--line:#39304e;--accent:#b88aff;--text:#f7f1ff;--muted:#b0a4c3}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,Arial}
-main{max-width:960px;margin:auto;padding:28px 16px 80px}
-h1{font-size:30px;margin:5px 0}
-h2{font-size:20px;margin:0 0 15px}
-h3{font-size:16px;margin:12px 0}
-p,small{color:var(--muted)}
-header{margin-bottom:25px}
-.eyebrow{color:var(--purple);font-size:11px;letter-spacing:2px;font-weight:700}
-.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;margin:16px 0}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.between{justify-content:space-between}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
-button{background:var(--purple);color:#160d24;border:0;border-radius:10px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}
-button:hover{filter:brightness(1.1)}
-button.secondary{background:#342b46;color:#eee}
-button.active{background:var(--purple);color:#130c20}
-button.danger{background:#663044;color:#fff}
+button,input,select{font:inherit}
+button{background:var(--accent);color:#170e22;border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
+button.secondary{background:#342b46;color:#f1eaff}
+button.danger{background:#79364a;color:white}
 button:disabled{opacity:.45;cursor:default}
-.tabs button{background:#272137;color:#c9b8df}
-.tabs button.active{background:var(--purple);color:#160d24}
-input,select,textarea{width:100%;background:#100e1b;border:1px solid #534565;border-radius:9px;padding:11px;color:white;font:inherit}
-label{display:block;margin:13px 0 6px;color:#d6c5ed}
+input,select{background:#100e1b;border:1px solid #534565;border-radius:9px;padding:11px;color:white;width:100%}
+label{display:block;margin:12px 0 6px;color:#d6c5ed}
+.app{max-width:1280px;margin:auto;padding:24px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:20px}
+.sidebar{background:#171322;border:1px solid var(--line);border-radius:16px;padding:16px;align-self:start;position:sticky;top:18px}
+.sidehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.sidehead h2{margin:0;font-size:17px}
+.side-section{margin:10px 0}
+.side-section>button{width:100%;text-align:left;background:#292239;color:#eee}
+.side-section>button.active{background:#604486}
+.side-projects{padding:5px 0 5px 12px}
+.side-projects button{display:block;width:100%;margin:5px 0;text-align:left;background:transparent;color:#c9b8df;font-weight:500;overflow-wrap:anywhere}
+.side-projects button.active{background:#403053;color:white}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--accent);font-weight:700}
+h1{font-size:30px;margin:4px 0}
+h2{font-size:20px;margin:0 0 14px}
+p,small{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:#292239;padding:15px;border-radius:12px;text-align:center}
-.stat strong{display:block;font-size:23px;color:#e1c8ff}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.stat{background:#292239;padding:14px;border-radius:12px;text-align:center;overflow-wrap:anywhere}
+.stat strong{display:block;font-size:21px;color:#e1c8ff}
 .stat small{font-size:12px}
-.project{background:#262037;border:1px solid #453857;border-radius:12px;padding:14px;margin:9px 0;cursor:pointer}
-.project.selected{border-color:var(--purple)}
-.project strong{display:block}
-.project small{display:block;margin-top:5px}
-#clock{text-align:center;font-size:clamp(58px,12vw,96px);font-weight:750;letter-spacing:-3px;font-variant-numeric:tabular-nums;margin:20px 0}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
-#stopAlarm{display:none;background:#fa7777}
+.hidden{display:none!important}
+#clock{text-align:center;font-size:clamp(55px,10vw,95px);font-weight:750;letter-spacing:-3px;font-variant-numeric:tabular-nums;margin:20px 0}
 .entry{border-top:1px solid var(--line);padding:12px 0}
 .entry small{display:block;margin-top:4px}
-.hidden{display:none!important}
-.completed{color:#b5efc7}
-#celebration{position:fixed;inset:0;background:rgba(9,5,20,.96);z-index:99;display:none;align-items:center;justify-content:center;text-align:center;padding:25px}
+#stopAlarm{display:none;background:#f77}
+#celebration{position:fixed;inset:0;z-index:99;background:rgba(9,5,20,.96);display:none;align-items:center;justify-content:center;text-align:center;padding:24px}
 #celebration.show{display:flex}
-#celebration h1{font-size:clamp(38px,8vw,70px);color:#e5c4ff}
 #confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.celebrate-inner{position:relative;z-index:2;max-width:600px}
-.celebrate-inner p{font-size:19px}
-.notice{font-size:13px;color:#b6a7c9}
-@media(max-width:550px){.two{grid-template-columns:1fr}.stats{gap:5px}.stat{padding:10px}.stat strong{font-size:19px}}
+.victory{position:relative;z-index:2}
+.victory h1{font-size:clamp(38px,8vw,70px);color:#e5c4ff}
+.notice{font-size:12px}
+@media(max-width:720px){.app{display:block;padding:14px}.sidebar{position:static}.two{grid-template-columns:1fr}.stat{padding:10px}.stat strong{font-size:17px}}
 </style>
 </head>
 <body>
+<div class="app">
+<aside class="sidebar">
+<div class="sidehead">
+<h2>Creative Sections</h2>
+<button id="addSection" title="Add section">＋</button>
+</div>
+<nav id="navigation"></nav>
+<button id="addProject" class="secondary" style="width:100%;margin-top:12px">＋ New Project</button>
+</aside>
+
 <main>
-<header>
+<header class="top">
+<div>
 <div class="eyebrow">YOUR CREATIVE PRODUCTIVITY SPACE</div>
 <h1>✦ Sprint Studio</h1>
-<p>Focus. Create. Track your wins. Celebrate them.</p>
+<p>Focus. Create. Track your wins.</p>
+</div>
+<button id="celebrate">🎉 Celebrate!</button>
 </header>
 
-<div class="row between">
-<strong>Creative Sections</strong>
-<button id="addSection" class="secondary">＋ New Section</button>
-</div>
-<nav id="tabs" class="tabs"></nav>
-
 <section class="card">
-<div class="row between">
-<h2 id="sectionTitle">Projects</h2>
-<button id="addProject">＋ New Project</button>
-</div>
-<div id="projects"></div>
-</section>
-
-<section class="card" id="dashboard">
 <h2>Project Dashboard</h2>
-<p id="projectInfo">Choose a project to begin.</p>
+<p id="projectInfo">Select a project in the sidebar.</p>
 <div class="stats">
 <div class="stat"><strong id="totalSprints">0</strong><small>Sprints</small></div>
-<div class="stat"><strong id="totalTime">0</strong><small>Focus Minutes</small></div>
-<div class="stat"><strong id="totalOutput">0</strong><small>Progress</small></div>
+<div class="stat"><strong id="totalTime">0</strong><small>Focus minutes</small></div>
+<div class="stat"><strong id="totalOutput">0</strong><small>Net output</small></div>
 </div>
-<div class="actions">
-<button id="celebrate" class="secondary">🎉 Celebrate a Win!</button>
-<button id="complete" class="secondary">✓ Mark Project Complete</button>
-<button id="reactivate" class="secondary hidden">↻ Reopen Project</button>
+<p id="manuscriptTotal"></p>
+<div class="row">
+<button id="complete" class="secondary">✓ Complete Project</button>
+<button id="reactivate" class="secondary hidden">↻ Reopen</button>
 <button id="renameProject" class="secondary">Rename</button>
+<button id="deleteProject" class="danger">Delete Project</button>
 </div>
 </section>
 
 <section class="card">
 <h2>Focus Timer</h2>
-<p id="currentProject">Select a project above.</p>
+<p id="currentProject">Choose a project first.</p>
 <div class="two">
 <div>
 <label>Duration (minutes)</label>
 <input id="duration" type="number" min="1" max="240" value="30">
 </div>
 <div>
-<label>Sprint goal (optional)</label>
-<input id="goal" placeholder="e.g. Write 1000 words">
+<label>Optional sprint goal</label>
+<input id="goal" placeholder="e.g. 1000 words">
 </div>
 </div>
 <div id="clock">30:00</div>
-<div class="actions">
-<button id="start">▶ Start Sprint</button>
+<div class="row">
+<button id="start">▶ Start</button>
 <button id="pause" class="secondary">Pause / Resume</button>
 <button id="reset" class="secondary">Reset</button>
 <button id="stopAlarm">🔕 Stop Alarm</button>
@@ -119,37 +115,45 @@ label{display:block;margin:13px 0 6px;color:#d6c5ed}
 
 <section class="card">
 <h2>Log Your Progress</h2>
+<div id="writingFields" class="hidden">
+<div class="two">
+<div>
+<label>Starting manuscript word count</label>
+<input id="startWords" type="number" min="0" step="1">
+</div>
+<div>
+<label>Ending manuscript word count</label>
+<input id="endWords" type="number" min="0" step="1">
+</div>
+</div>
+<p id="netWords">Net words: —</p>
+</div>
+<div id="generalFields">
 <div class="two">
 <div>
 <label>Amount completed</label>
-<input id="amount" type="number" min="0" placeholder="e.g. 850">
+<input id="amount" type="number" step="any" placeholder="e.g. 2">
 </div>
 <div>
 <label>Progress unit</label>
 <select id="unit">
-<option>words</option>
-<option>chapters</option>
-<option>books</option>
-<option>episodes</option>
-<option>scripts</option>
-<option>scenes</option>
-<option>reels</option>
-<option>videos</option>
-<option>posts</option>
-<option>graphics</option>
-<option>tasks</option>
-<option>pages</option>
+<option>episodes</option><option>scripts</option>
+<option>scenes</option><option>reels</option>
+<option>videos</option><option>posts</option>
+<option>graphics</option><option>tasks</option>
+<option>pages</option><option>words</option>
 <option>custom</option>
 </select>
 </div>
 </div>
 <div id="customUnitWrap" class="hidden">
-<label>Custom unit name</label>
+<label>Custom unit</label>
 <input id="customUnit" placeholder="e.g. illustrations">
 </div>
-<label>Notes</label>
+</div>
+<label>Notes (optional)</label>
 <input id="notes" placeholder="What did you accomplish?">
-<div class="actions">
+<div class="row" style="margin-top:16px">
 <button id="saveSprint">Save Progress</button>
 </div>
 </section>
@@ -157,222 +161,243 @@ label{display:block;margin:13px 0 6px;color:#d6c5ed}
 <section class="card">
 <h2>Project Sprint History</h2>
 <div id="history"></div>
-<div class="actions">
+<div class="row">
 <button id="export" class="secondary">Export All Data</button>
 <button id="import" class="secondary">Import Backup</button>
-<input type="file" id="importFile" accept=".json" class="hidden">
+<input id="importFile" type="file" accept=".json" class="hidden">
 </div>
-<p class="notice">Your data is saved in this browser. Export a backup regularly, especially before clearing browser data.</p>
+<p class="notice">Data stays in this browser. Export a backup before clearing browser data or switching devices.</p>
 </section>
 </main>
+</div>
 
 <div id="celebration">
 <canvas id="confetti"></canvas>
-<div class="celebrate-inner">
-<div style="font-size:65px">🏆🎉✨</div>
+<div class="victory">
+<div style="font-size:64px">🏆🎉✨</div>
 <h1>YOU DID THAT!</h1>
-<p id="victoryText">Another creative victory!</p>
-<p>You showed up. You created. You finished something worth celebrating.</p>
+<p>Every win deserves its moment.</p>
 <button id="closeCelebration">Keep Winning 💜</button>
 </div>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
-const KEY="sprint-studio-v2";
-const defaults=["Writing","Episodes","Content Batching"];
+const KEY='sprint-studio-v2';
 let data;
-try{data=JSON.parse(localStorage.getItem(KEY))}
-catch(e){data=null}
+try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!data||!Array.isArray(data.sections)||!Array.isArray(data.projects)||!Array.isArray(data.sessions)){
- data={sections:[...defaults],projects:[],sessions:[]};
+ data={sections:['Writing','Episodes','Content Batching'],projects:[],sessions:[]};
 }
-let section=data.sections[0]||"Writing";
-let projectId=null;
+let section=data.sections[0]||'Writing',projectId=null;
 let running=false,paused=false,remaining=1800,deadline=0;
-let interval=null,sessionSeconds=0,startedAt=null;
-let audio=null,alarmInterval=null,alarmTimeout=null;
-let soundNodes=[];
+let interval=null,sessionSeconds=0,audio=null;
+let alarmInterval=null,alarmTimeout=null,soundNodes=[];
 let celebrationFrame=null;
-let celebrationTimeout=null;
-let particles=[];
-
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const selected=()=>data.projects.find(p=>p.id===projectId);
+const projectSessions=()=>data.sessions.filter(s=>s.projectId===projectId);
 function persist(){
  try{localStorage.setItem(KEY,JSON.stringify(data))}
- catch(e){alert("Storage failed. Please export a backup.")}
+ catch(e){alert('Could not save. Export your data.')}
 }
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
-function selected(){return data.projects.find(p=>p.id===projectId)}
-function notify(msg){$("timerStatus").textContent=msg}
-function askName(message){
- const v=prompt(message);
+function notify(s){$('timerStatus').textContent=s}
+function askName(s){
+ const v=prompt(s);
  return v===null?null:v.trim();
 }
+function isWriting(){return selected()?.section==='Writing'}
+function latestWordCount(p){
+ const s=data.sessions.filter(x=>
+  x.projectId===p.id &&
+  Number.isFinite(Number(x.endWords)) &&
+  x.endWords!==undefined &&
+  x.endWords!==null &&
+  x.endWords!==''
+ ).at(-1);
+ return s?Number(s.endWords):14854;
+}
 function render(){
- $("tabs").replaceChildren();
+ const nav=$('navigation');
+ nav.replaceChildren();
  data.sections.forEach(s=>{
-  const b=document.createElement("button");
-  b.textContent=s;b.className=s===section?"active":"";
+  const group=document.createElement('div');
+  group.className='side-section';
+  const b=document.createElement('button');
+  b.textContent=s;
+  b.className=s===section?'active':'';
   b.onclick=()=>{section=s;projectId=null;reset();render()};
-  $("tabs").append(b);
+  group.append(b);
+  if(s===section){
+   const inner=document.createElement('div');
+   inner.className='side-projects';
+   data.projects.filter(p=>p.section===s).forEach(p=>{
+    const pb=document.createElement('button');
+    pb.textContent=(p.completed?'✓ ':'📁 ')+p.name;
+    pb.className=p.id===projectId?'active':'';
+    pb.onclick=()=>{projectId=p.id;reset();render()};
+    inner.append(pb);
+   });
+   group.append(inner);
+  }
+  nav.append(group);
  });
- $("sectionTitle").textContent=section+" Projects";
- const wrap=$("projects");wrap.replaceChildren();
- const items=data.projects.filter(p=>p.section===section);
- if(!items.length){
-  const p=document.createElement("p");
-  p.textContent="No projects yet. Create your first one!";
-  wrap.append(p);
- }
- items.forEach(p=>{
-  const div=document.createElement("div");
-  div.className="project"+(p.id===projectId?" selected":"");
-  const strong=document.createElement("strong");
-  strong.textContent=(p.completed?"✓ ":"📁 ")+p.name;
-  const small=document.createElement("small");
-  const sessions=data.sessions.filter(x=>x.projectId===p.id);
-  small.textContent=sessions.length+" sprints"+(p.completed?" · Completed":"");
-  div.append(strong,small);
-  div.onclick=()=>{projectId=p.id;reset();render()};
-  wrap.append(div);
- });
- const p=selected();
- $("projectInfo").textContent=p?p.name+(p.completed?" · Completed 🏆":""):"Select a project to see its progress.";
- $("currentProject").textContent=p?"Working on: "+p.name:"Select a project before starting.";
- const sessions=data.sessions.filter(x=>x.projectId===projectId);
- $("totalSprints").textContent=sessions.length;
- $("totalTime").textContent=sessions.reduce((a,x)=>a+(Number(x.minutes)||0),0);
+ const p=selected(),sessions=projectSessions();
+ $('projectInfo').textContent=p?p.name+(p.completed?' · Completed 🏆':''):'Select a project in the sidebar.';
+ $('currentProject').textContent=p?'Working on: '+p.name:'Choose a project first.';
+ $('totalSprints').textContent=sessions.length;
+ $('totalTime').textContent=sessions.reduce((n,s)=>n+(Number(s.minutes)||0),0);
  const totals={};
- sessions.forEach(x=>{
-  const u=x.unit||"items";
-  totals[u]=(totals[u]||0)+(Number(x.amount)||0);
+ sessions.forEach(s=>{
+  const u=s.unit||'items';
+  totals[u]=(totals[u]||0)+(Number(s.amount)||0);
  });
- $("totalOutput").textContent=Object.entries(totals).map(([u,n])=>n+" "+u).join(", ")||"0";
- $("celebrate").disabled=!p;
- $("complete").disabled=!p||p.completed;
- $("reactivate").classList.toggle("hidden",!p||!p.completed);
- $("renameProject").disabled=!p;
- $("start").disabled=!p||p.completed;
- $("saveSprint").disabled=!p;
- const h=$("history");h.replaceChildren();
- if(!sessions.length){
-  const empty=document.createElement("p");
-  empty.textContent="No sessions logged for this project yet.";
-  h.append(empty);
+ $('totalOutput').textContent=Object.entries(totals).map(([u,n])=>n+' '+u).join(', ')||'0';
+ $('manuscriptTotal').textContent=p&&isWriting()?'Latest manuscript count: '+latestWordCount(p).toLocaleString()+' words':'';
+ $('complete').disabled=!p||p.completed;
+ $('reactivate').classList.toggle('hidden',!p||!p.completed);
+ $('renameProject').disabled=!p;
+ $('deleteProject').disabled=!p;
+ $('start').disabled=!p||p.completed;
+ $('saveSprint').disabled=!p||p.completed;
+ $('writingFields').classList.toggle('hidden',!isWriting());
+ $('generalFields').classList.toggle('hidden',isWriting());
+ if(p&&isWriting()){
+  $('startWords').value=latestWordCount(p);
+  $('endWords').value='';
+  updateNet();
  }
- sessions.slice().reverse().forEach(x=>{
-  const div=document.createElement("div");div.className="entry";
-  const title=document.createElement("strong");
-  title.textContent=(x.amount||0)+" "+x.unit+" · "+(x.minutes||0)+" minutes";
-  const date=document.createElement("small");
-  date.textContent=new Date(x.date).toLocaleString();
+ const h=$('history');h.replaceChildren();
+ if(!sessions.length){
+  const e=document.createElement('p');
+  e.textContent='No sessions logged for this project yet.';
+  h.append(e);
+ }
+ sessions.slice().reverse().forEach(s=>{
+  const div=document.createElement('div');div.className='entry';
+  const title=document.createElement('strong');
+  title.textContent=(Number(s.amount)||0)+' '+(s.unit||'items')+' · '+(Number(s.minutes)||0)+' minutes';
+  const date=document.createElement('small');
+  date.textContent=new Date(s.date).toLocaleString();
   div.append(title,date);
-  if(x.notes){
-   const note=document.createElement("small");
-   note.textContent=x.notes;div.append(note);
+  if(s.startWords!==undefined){
+   const counts=document.createElement('small');
+   counts.textContent='Manuscript: '+s.startWords+' → '+s.endWords;
+   div.append(counts);
+  }
+  if(s.notes){
+   const note=document.createElement('small');
+   note.textContent=s.notes;div.append(note);
   }
   h.append(div);
  });
 }
-$("addSection").onclick=()=>{
- const name=askName("Name your new creative section:");
+$('addSection').onclick=()=>{
+ const name=askName('New creative section name:');
  if(!name)return;
- if(data.sections.some(s=>s.toLowerCase()===name.toLowerCase())){
-  alert("That section already exists.");return;
- }
+ if(data.sections.some(s=>s.toLowerCase()===name.toLowerCase()))return alert('That section already exists.');
  data.sections.push(name);section=name;projectId=null;
  reset();persist();render();
 };
-$("addProject").onclick=()=>{
- const name=askName("Name your new project:");
+$('addProject').onclick=()=>{
+ const name=askName('New project name:');
  if(!name)return;
  const p={id:uid(),name,section,completed:false};
  data.projects.push(p);projectId=p.id;
  reset();persist();render();
 };
-$("renameProject").onclick=()=>{
+$('renameProject').onclick=()=>{
  const p=selected();if(!p)return;
- const name=askName("New name for "+p.name+":");
- if(!name)return;
- p.name=name;persist();render();
+ const name=askName('Rename '+p.name+':');
+ if(name){p.name=name;persist();render()}
 };
-$("complete").onclick=()=>{
+$('deleteProject').onclick=()=>{
  const p=selected();if(!p)return;
- if(!confirm("Mark "+p.name+" as completed?"))return;
+ const n=projectSessions().length;
+ if(!confirm('Permanently delete "'+p.name+'" and its '+n+' sprint records? This cannot be undone. Export a backup first if needed.'))return;
+ data.projects=data.projects.filter(x=>x.id!==p.id);
+ data.sessions=data.sessions.filter(x=>x.projectId!==p.id);
+ projectId=null;reset();persist();render();
+};
+$('complete').onclick=()=>{
+ const p=selected();
+ if(!p||!confirm('Mark '+p.name+' complete?'))return;
  stopTimer();stopAlarm();paused=false;
  p.completed=true;p.completedAt=new Date().toISOString();
- persist();render();celebrate(p.name);
+ persist();render();celebrate();
 };
-$("reactivate").onclick=()=>{
+$('reactivate').onclick=()=>{
  const p=selected();if(!p)return;
  p.completed=false;delete p.completedAt;
  persist();render();
 };
-$("celebrate").onclick=()=>celebrate(selected()?.name||"Your Win");
-
-function displayClock(){
+function updateNet(){
+ const a=$('startWords').value,b=$('endWords').value;
+ $('netWords').textContent=a!==''&&b!==''?'Net words: '+(Number(b)-Number(a)).toLocaleString():'Net words: —';
+}
+$('startWords').oninput=updateNet;
+$('endWords').oninput=updateNet;
+$('unit').onchange=()=>$('customUnitWrap').classList.toggle('hidden',$('unit').value!=='custom');
+function showClock(){
  const m=Math.floor(remaining/60),s=remaining%60;
- $("clock").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
- document.title=$("clock").textContent+" | Sprint Studio";
+ $('clock').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ document.title=$('clock').textContent+' | Sprint Studio';
 }
-function stopTimer(){
- clearInterval(interval);interval=null;running=false;
-}
+function stopTimer(){clearInterval(interval);interval=null;running=false}
 function tick(){
  remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
- displayClock();
- if(remaining===0){
+ showClock();
+ if(!remaining){
   stopTimer();paused=false;
-  notify("Sprint complete! Log your progress.");
+  notify('Sprint complete! Log your progress.');
   alarm();
  }
 }
 function start(){
  if(running)return;
  const p=selected();
- if(!p||p.completed){notify("Choose an active project first.");return}
+ if(!p||p.completed)return notify('Choose an active project first.');
  stopAlarm();
  if(!paused){
-  remaining=Math.max(1,Math.min(240,Number($("duration").value)||30))*60;
+  remaining=Math.max(1,Math.min(240,Number($('duration').value)||30))*60;
   sessionSeconds=remaining;
-  startedAt=Date.now();
  }
  try{
-  audio=audio||new (window.AudioContext||window.webkitAudioContext)();
+  audio=audio||new(window.AudioContext||window.webkitAudioContext)();
   audio.resume();
  }catch(e){}
  deadline=Date.now()+remaining*1000;
  running=true;paused=false;
  interval=setInterval(tick,250);
- notify("Sprint in progress. You've got this!");
- displayClock();
+ notify('Sprint in progress. You’ve got this!');
+ showClock();
 }
 function pause(){
  if(running){
   tick();
-  if(running){stopTimer();paused=true;notify("Paused.");}
+  if(running){stopTimer();paused=true;notify('Paused.')}
  }else if(paused)start();
 }
 function reset(){
  stopTimer();stopAlarm();paused=false;
- remaining=Math.max(1,Math.min(240,Number($("duration").value)||30))*60;
- sessionSeconds=0;startedAt=null;
- notify("Ready when you are.");displayClock();
+ remaining=Math.max(1,Math.min(240,Number($('duration').value)||30))*60;
+ sessionSeconds=0;
+ notify('Ready when you are.');
+ showClock();
 }
 function beep(){
  if(!audio)return;
  audio.resume();
  for(let i=0;i<3;i++){
-  const osc=audio.createOscillator();
-  const gain=audio.createGain();
-  osc.type="square";osc.frequency.value=i%2?650:950;
+  const osc=audio.createOscillator(),gain=audio.createGain();
+  osc.type='square';osc.frequency.value=i%2?650:950;
   osc.connect(gain);gain.connect(audio.destination);
   const t=audio.currentTime+i*.27;
   gain.gain.setValueAtTime(.18,t);
   gain.gain.setValueAtTime(0,t+.19);
   osc.start(t);osc.stop(t+.2);
   soundNodes.push(osc);
-  osc.onended=()=>{soundNodes=soundNodes.filter(n=>n!==osc)};
+  osc.onended=()=>soundNodes=soundNodes.filter(n=>n!==osc);
  }
 }
 function stopAlarm(){
@@ -380,88 +405,87 @@ function stopAlarm(){
  alarmInterval=null;alarmTimeout=null;
  soundNodes.forEach(n=>{try{n.stop()}catch(e){}});
  soundNodes=[];
- $("stopAlarm").style.display="none";
+ $('stopAlarm').style.display='none';
 }
 function alarm(){
  stopAlarm();
- $("stopAlarm").style.display="inline-block";
+ $('stopAlarm').style.display='inline-block';
  beep();
  alarmInterval=setInterval(beep,1000);
  alarmTimeout=setTimeout(stopAlarm,20000);
 }
-$("start").onclick=start;
-$("pause").onclick=pause;
-$("reset").onclick=reset;
-$("stopAlarm").onclick=stopAlarm;
-$("duration").onchange=()=>{if(!running&&!paused)reset()};
-$("unit").onchange=()=>{
- $("customUnitWrap").classList.toggle("hidden",$("unit").value!=="custom");
-};
-$("saveSprint").onclick=()=>{
- const p=selected();
- if(!p){notify("Choose a project first.");return}
+$('start').onclick=start;
+$('pause').onclick=pause;
+$('reset').onclick=reset;
+$('stopAlarm').onclick=stopAlarm;
+$('duration').onchange=()=>{if(!running&&!paused)reset()};
+$('saveSprint').onclick=()=>{
+ const p=selected();if(!p||p.completed)return;
  if(running){tick();if(running){stopTimer();paused=true}}
- const amount=Math.max(0,Number($("amount").value)||0);
  const minutes=Math.max(0,Math.round((sessionSeconds-remaining)/60));
- if(!amount&&!minutes){
-  notify("Enter progress or run a sprint first.");return;
+ let amount,unit,startWords,endWords;
+ if(isWriting()){
+  const a=$('startWords').value,b=$('endWords').value;
+  if(a===''||b==='')return notify('Enter both manuscript word counts.');
+  startWords=Number(a);endWords=Number(b);
+  if(!Number.isInteger(startWords)||!Number.isInteger(endWords)||startWords<0||endWords<0)return notify('Word counts must be nonnegative whole numbers.');
+  amount=endWords-startWords;unit='words';
+ }else{
+  amount=Number($('amount').value)||0;
+  unit=$('unit').value;
+  if(unit==='custom')unit=$('customUnit').value.trim()||'items';
  }
- let unit=$("unit").value;
- if(unit==="custom")unit=$("customUnit").value.trim()||"items";
- data.sessions.push({
+ if(!minutes&&!amount)return notify('Run a sprint or enter progress first.');
+ const entry={
   id:uid(),projectId:p.id,date:new Date().toISOString(),
-  minutes,amount,unit,goal:$("goal").value,
-  notes:$("notes").value
- });
+  minutes,amount,unit,goal:$('goal').value,notes:$('notes').value
+ };
+ if(isWriting()){entry.startWords=startWords;entry.endWords=endWords}
+ data.sessions.push(entry);
  persist();
- $("amount").value="";$("notes").value="";
- reset();render();notify("Progress saved. Nice work! 💜");
+ $('amount').value='';$('notes').value='';
+ reset();render();notify('Progress saved! 💜');
 };
-$("export").onclick=()=>{
- const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;a.download="sprint-studio-backup.json";a.click();
+$('export').onclick=()=>{
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='sprint-studio-backup.json';a.click();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-$("import").onclick=()=>$("importFile").click();
-$("importFile").onchange=async e=>{
- const file=e.target.files[0];if(!file)return;
+$('import').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
  try{
-  const imported=JSON.parse(await file.text());
-  if(!Array.isArray(imported.sections)||!Array.isArray(imported.projects)||!Array.isArray(imported.sessions))throw Error("Invalid backup");
-  if(!confirm("Replace your current data with this backup?"))return;
-  data=imported;section=data.sections[0]||"Writing";projectId=null;
-  persist();reset();render();
- }catch(err){alert("This doesn't appear to be a valid Sprint Studio 2.0 backup.")}
- e.target.value="";
+  const d=JSON.parse(await f.text());
+  if(!Array.isArray(d.sections)||!Array.isArray(d.projects)||!Array.isArray(d.sessions))throw Error('Invalid');
+  if(confirm('Replace current data with this backup?')){
+   data=d;section=data.sections[0]||'Writing';projectId=null;
+   persist();reset();render();
+  }
+ }catch(err){alert('Invalid Sprint Studio backup.')}
+ e.target.value='';
 };
-
-function celebrate(name){
- $("victoryText").textContent=name+" deserves its moment!";
- $("celebration").classList.add("show");
- const canvas=$("confetti"),ctx=canvas.getContext("2d");
- canvas.width=window.innerWidth;canvas.height=window.innerHeight;
- const colors=["#b88aff","#f3a7db","#f5ca6c","#ffffff","#7fd8ee"];
- particles=Array.from({length:190},()=>({
-  x:Math.random()*canvas.width,
-  y:-Math.random()*canvas.height,
-  vx:(Math.random()-.5)*5,
-  vy:2+Math.random()*5,
+function celebrate(){
+ const overlay=$('celebration'),canvas=$('confetti'),ctx=canvas.getContext('2d');
+ overlay.classList.add('show');
+ canvas.width=innerWidth;canvas.height=innerHeight;
+ const colors=['#b88aff','#f3a7db','#f5ca6c','#ffffff','#7fd8ee'];
+ let pieces=Array.from({length:190},()=>({
+  x:Math.random()*canvas.width,y:-Math.random()*canvas.height,
+  vx:(Math.random()-.5)*5,vy:2+Math.random()*5,
   size:3+Math.random()*7,
   color:colors[Math.floor(Math.random()*colors.length)],
-  angle:Math.random()*6,
-  spin:(Math.random()-.5)*.15
+  angle:Math.random()*6,spin:(Math.random()-.5)*.15
  }));
  cancelAnimationFrame(celebrationFrame);
- clearTimeout(celebrationTimeout);
  const end=Date.now()+9000;
  function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
+  pieces.forEach(p=>{
    p.x+=p.vx;p.y+=p.vy;p.angle+=p.spin;
    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);
-   ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6);
+   ctx.fillStyle=p.color;
+   ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6);
    ctx.restore();
    if(p.y>canvas.height){p.y=-10;p.x=Math.random()*canvas.width}
   });
@@ -469,10 +493,10 @@ function celebrate(name){
  }
  draw();
 }
-$("closeCelebration").onclick=()=>{
- $("celebration").classList.remove("show");
+$('celebrate').onclick=celebrate;
+$('closeCelebration').onclick=()=>{
+ $('celebration').classList.remove('show');
  cancelAnimationFrame(celebrationFrame);
- clearTimeout(celebrationTimeout);
 };
 render();reset();
 </script>
